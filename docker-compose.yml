@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  php:
+    build: .
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    networks:
+      - net
+    healthcheck:
+        test: ["CMD", "curl", "http://nginx", "grep", "works"]
+
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - net
+networks:
+  net:
+    driver: bridge
